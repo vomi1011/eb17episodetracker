@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema">
+ <datasource jndi-name="java:jboss/datasources/eb17episodetracker-ds" enabled="true" 
+     use-java-context="true" pool-name="PostgreSQL">
+  <connection-url>jdbc:postgresql://localhost:5432/eb17episodetracker</connection-url>
+  <driver>postgresql-9.1-903.jdbc4.jar</driver>
+  <pool></pool>
+  <security>
+   <user-name>eb17episodetracker</user-name>
+   <password>p</password>
+  </security>
+ </datasource>
+</datasources>
