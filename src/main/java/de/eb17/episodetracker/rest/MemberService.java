@@ -126,7 +126,7 @@ public class MemberService {
 			log.fine("Member with email '" + email + "' not found");
 		}
     	
-		return null;
+		throw new WebApplicationException(Response.Status.UNAUTHORIZED);
     }
 
     /**

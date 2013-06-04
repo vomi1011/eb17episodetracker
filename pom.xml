@@ -99,6 +99,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+			<dependency>
+				<groupId>org.jboss.bom</groupId>
+				<artifactId>jboss-javaee-6.0-with-resteasy</artifactId>
+				<version>${version.jboss.bom}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
         </dependencies>
     </dependencyManagement>
     
@@ -192,6 +199,18 @@
             <scope>test</scope>
         </dependency>
 
+		
+        <!-- Import RESTEasy API -->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-multipart-provider</artifactId>
+			<scope>provided</scope>
+		</dependency>
     </dependencies>
 
     <build>

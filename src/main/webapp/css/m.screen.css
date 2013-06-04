@@ -1,1 +1,4 @@
 /* Core styles for the mobile version of the application */
+html, body, .ui-page, .ui-content {
+	height: 100%;
+}

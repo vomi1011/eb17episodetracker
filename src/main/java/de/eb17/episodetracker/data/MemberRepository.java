@@ -19,6 +19,10 @@ public class MemberRepository {
     public Member findById(Long id) {
         return em.find(Member.class, id);
     }
+    
+    public Member update(Member member) {
+    	return em.merge(member);
+    }
 
     public Member findByEmail(String email) {
         CriteriaBuilder cb = em.getCriteriaBuilder();

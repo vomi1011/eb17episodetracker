@@ -20,7 +20,7 @@
 <div data-role="page" id='home'>
 
 	<div data-role="header" data-fullscreen="true">
-		<h1>eB17 Episode Tracker</h1>
+		<h1>Episode Tracker</h1>
 	</div>
 	<!-- /header -->
 
@@ -30,9 +30,12 @@
 			data-filter-theme="d">
 		</ul>
 		
+		<ul id="upcomming" data-role="listview" data-inset="true" data-divider-theme="d"></ul>
+		
 		<ul id="trend" data-role="listview" data-inset="true" data-divider-theme="d"></ul>
 
-		<a href="#profile" data-role="button" data-theme="b">My Profile</a>
+		<a href="#friends" data-role="button" data-icon="star" data-theme="b">Friends</a>
+    	<a href="#profile" data-role="button" data-icon="gear" data-theme="b">Profile</a>
 
 		</div>
 	<!-- /content -->
@@ -45,19 +48,21 @@
 <div data-role="page" id="serieDetails" data-theme="d">
 
 	<div data-role="header">
-    	<a href="#home" data-icon="back">Back</a>
+    	<a href="#home" data-icon="back" data-transition="slide" data-direction="reverse">Back</a>
 		<h1 id="title"></h1>
-    	<a href="#" class="ui-btn-right" data-icon=add>Add</a>
+    	<a id="addSerie" href="#" class="ui-btn-right" data-icon=add>Add</a>
 	</div><!-- /header -->
 
 	<div data-role="content" data-theme="a">
-		<img id="banner">
-		<p id="genres"></p>
-		<p id="airs"></p>
-		<h2>Next</h2>
-		<div id="episode"></div>
-		<h2>Overview</h2>
+		<div id="details">
+			<img id="banner">
+			<p id="genres"></p>
+			<p id="airs"></p>
+			<h2>Next</h2>
+			<div id="episode"></div>
+			<h2>Overview</h2>
 		<p id="desc"></p>
+		</div>
 	</div><!-- /content -->
 
 	</div><!-- /serieDetails -->
@@ -69,18 +74,40 @@
 	<div data-role="header" data-fullscreen="true">
     	<a href="#home" data-icon="back">Back</a>
 		<h1>My Profile</h1>
-    	<a href="#home" class="ui-btn-right">Logout</a>
+    	<a href="#home" id="logout" class="ui-btn-right">Logout</a>
 	</div>
 	<!-- /header -->
 
 	<div data-role="content">
-		<div id="information"></div>
-		
-		<a href="#friends" data-role="button" data-theme="b">Friends</a>
+		<form id="updateData" method="post">
+			<input required type="text" name="forename" value="" placeholder="forename">
+			<input required type="text" name="surname" value="" placeholder="surname">
+			<input type="text" name="location" value="" placeholder="location">
+			<input required type="email" name="email" value="" placeholder="email">
+			<input required type="password" name="password" value="" placeholder="password">
+			<input required type="password" name="passwordConf" value="" placeholder="password confirmation">
+	    	<input type="submit" value="Save" data-theme="b">
+		</form>
 	</div><!-- /content -->
 
 </div>
 <!-- /profile -->
+
+
+<!-- friends view -->
+<div data-role="page" id='friends' data-theme="b">
+
+	<div data-role="header" data-fullscreen="true">
+    	<a href="#home" data-icon="back">Back</a>
+		<h1>Friends</h1>
+	</div>
+	<!-- /header -->
+
+	<div data-role="content">
+	</div><!-- /content -->
+
+</div>
+<!-- /friends -->
 
 
 <!-- login view -->
@@ -95,9 +122,9 @@
 	<div data-role="content">
 	<h1>Please sign-in</h1>
 		<form id="signinData" method="post">
-			<input required type="text" name="email" id="email" value="" placeholder="email">
-			<input required type="password" name="password" id="password" value="" placeholder="password">
-	    	<input type="submit" value="Sign-In" data-theme="b">
+			<input required type="text" name="email" id="email" data-clear-btn="true" placeholder="email">
+			<input required type="password" name="password" id="password" data-clear-btn="true" placeholder="password">
+	    	<input type="submit" id="submitSignin" value="Sign-In" data-theme="b">
 		</form>
 		
 		<p>No account? <a href="#register">Register</a></p>
@@ -124,7 +151,7 @@
 			<input required type="email" name="email" id="email" value="" placeholder="email">
 			<input required type="password" name="password" id="password" value="" placeholder="password">
 			<input required type="password" name="passwordConf" id="passwordConf" value="" placeholder="password confirmation">
-	    	<input type="submit" value=Register data-theme="b">
+	    	<input type="submit" value="Register" data-theme="b">
 		</form>
 	</div><!-- /content -->
 

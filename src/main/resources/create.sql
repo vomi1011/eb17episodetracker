@@ -28,6 +28,20 @@ CREATE SCHEMA eb17episodetracker
   AUTHORIZATION eb17episodetracker;
 
 
+-- Sequence: eb17episodetracker.hibernate_sequence
+
+-- DROP SEQUENCE eb17episodetracker.hibernate_sequence;
+
+CREATE SEQUENCE eb17episodetracker.hibernate_sequence
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 2
+  CACHE 1;
+ALTER TABLE eb17episodetracker.hibernate_sequence
+  OWNER TO postgres;
+
+
 -- Table: eb17episodetracker.member
 
 -- DROP TABLE eb17episodetracker.member;
@@ -47,4 +61,65 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE eb17episodetracker.member
+  OWNER TO eb17episodetracker;
+
+
+-- Sequence: eb17episodetracker.serie_seq
+
+-- DROP SEQUENCE eb17episodetracker.serie_seq;
+
+CREATE SEQUENCE eb17episodetracker.serie_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 3
+  CACHE 1;
+ALTER TABLE eb17episodetracker.serie_seq
+  OWNER TO postgres;
+
+
+-- Table: eb17episodetracker.serie
+
+-- DROP TABLE eb17episodetracker.serie;
+
+CREATE TABLE eb17episodetracker.serie
+(
+  id integer NOT NULL,
+  title text,
+  url text,
+  season integer,
+  episode integer,
+  air_time text,
+  air_day text,
+  poster text,
+  network text,
+  CONSTRAINT id_serie PRIMARY KEY (id),
+  CONSTRAINT url_unique UNIQUE (url)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE eb17episodetracker.serie
+  OWNER TO eb17episodetracker;
+
+  
+  -- Table: eb17episodetracker.track
+
+-- DROP TABLE eb17episodetracker.track;
+
+CREATE TABLE eb17episodetracker.track
+(
+  member integer,
+  serie integer,
+  CONSTRAINT member_fk FOREIGN KEY (member)
+      REFERENCES eb17episodetracker.member (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT serie_fk FOREIGN KEY (serie)
+      REFERENCES eb17episodetracker.serie (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE eb17episodetracker.track
   OWNER TO eb17episodetracker;
