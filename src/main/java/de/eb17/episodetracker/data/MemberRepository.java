@@ -1,6 +1,7 @@
 package de.eb17.episodetracker.data;
 
-import de.eb17.episodetracker.model.Member;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -8,7 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
+
+import de.eb17.episodetracker.model.FollowedMember;
+import de.eb17.episodetracker.model.Member;
 
 @ApplicationScoped
 public class MemberRepository {
@@ -38,5 +41,25 @@ public class MemberRepository {
         Root<Member> member = criteria.from(Member.class);
         criteria.select(member).orderBy(cb.asc(member.get("surname")));
         return em.createQuery(criteria).getResultList();
+    }
+
+	public void addFollow(FollowedMember fm) {
+		em.persist(fm);
+	}
+	
+
+    public List<Member> findFollowedMembers(Long id) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<FollowedMember> criteria = cb.createQuery(FollowedMember.class);
+        Root<FollowedMember> fm = criteria.from(FollowedMember.class);
+        criteria.select(fm).where(cb.equal(fm.get("member"), id));
+        List<FollowedMember> followedMembers = em.createQuery(criteria).getResultList();
+        
+        List<Member> members = new ArrayList<>();
+        for (FollowedMember followedMember : followedMembers) {
+			members.add(findById(followedMember.getFollow()));
+		}
+        
+        return members;
     }
 }

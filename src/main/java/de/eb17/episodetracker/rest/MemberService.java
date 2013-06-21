@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.eb17.episodetracker.data.MemberRepository;
+import de.eb17.episodetracker.model.FollowedMember;
 import de.eb17.episodetracker.model.Member;
 import de.eb17.episodetracker.service.MemberRegistration;
 
@@ -35,6 +36,7 @@ import de.eb17.episodetracker.service.MemberRegistration;
  */
 @Path("/members")
 @RequestScoped
+@Produces(MediaType.APPLICATION_JSON)
 @Stateful
 public class MemberService {
     @Inject
@@ -50,14 +52,12 @@ public class MemberService {
     MemberRegistration registration;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public List<Member> listAllMembers() {
         return repository.findAllOrderedBySurname();
     }
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Member lookupMemberById(@PathParam("id") long id) {
         Member member = repository.findById(id);
         if (member == null) {
@@ -72,7 +72,6 @@ public class MemberService {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createMember(Member member) {
 
         Response.ResponseBuilder builder = null;
@@ -110,7 +109,6 @@ public class MemberService {
      */
     @GET
     @Path("/signin")
-    @Produces(MediaType.APPLICATION_JSON)
     public Member signin(@QueryParam("email") String email, @QueryParam("password") String password) {
     	log.fine("email: " + email);
     	log.fine("password: " + password);
@@ -127,6 +125,23 @@ public class MemberService {
 		}
     	
 		throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+    }
+    
+    @POST
+    @Path("/follow")
+    public void followMember(FollowedMember fm) {
+    	try {
+    		repository.addFollow(fm);
+    	}
+    	catch (Exception e) {
+    		// do nothing
+    	}
+    }
+    
+    @GET
+    @Path("/{id}/follow")
+    public List<Member> getFollowedMembers(@PathParam(value="id") Long id) {
+    	return repository.findFollowedMembers(id);
     }
 
     /**
@@ -183,7 +198,7 @@ public class MemberService {
      * @param email The email to check
      * @return True if the email already exists, and false otherwise
      */
-    public boolean emailAlreadyExists(String email) {
+    private boolean emailAlreadyExists(String email) {
         Member member = null;
         try {
             member = repository.findByEmail(email);

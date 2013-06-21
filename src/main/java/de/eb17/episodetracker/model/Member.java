@@ -59,8 +59,8 @@ public class Member implements Serializable {
     		name="track",
     		joinColumns={@JoinColumn(name="member", referencedColumnName="id")},
     		inverseJoinColumns={@JoinColumn(name="serie", referencedColumnName="id")})
-    List<Serie> track;
-
+    private List<Serie> track;
+    
     public String getEmail() {
         return email;
     }
