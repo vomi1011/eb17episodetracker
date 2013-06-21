@@ -28,7 +28,7 @@ public class FollowedMember implements Serializable {
     private Long member;
     
     @NotNull
-    @Column(name="following")
+    @Column(name="follow")
     private Long follow;
 
 	public Long getId() {

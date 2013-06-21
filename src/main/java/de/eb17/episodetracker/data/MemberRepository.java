@@ -62,4 +62,14 @@ public class MemberRepository {
         
         return members;
     }
+
+	@SuppressWarnings("unchecked")
+	public List<Member> findByName(String name) {
+		name = name.replace("+", "%").toLowerCase();
+		String query =
+				"select * from eb17episodetracker.member m where lower(m.forename || ' ' ||  m.surname) like '%"
+				+ name + "%'";
+        
+		return (List<Member>) em.createNativeQuery(query, Member.class).getResultList();
+	}
 }

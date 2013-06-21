@@ -66,6 +66,12 @@ public class MemberService {
         return member;
     }
 
+    @GET
+    @Path("/name/{name}")
+    public List<Member> lookupMemberByName(@PathParam(value="name") String name) {
+    	return repository.findByName(name);
+    }
+
     /**
      * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.
@@ -128,6 +134,7 @@ public class MemberService {
     }
     
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/follow")
     public void followMember(FollowedMember fm) {
     	try {

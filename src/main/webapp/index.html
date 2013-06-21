@@ -104,6 +104,30 @@
 	<!-- /header -->
 
 	<div data-role="content">
+		<ul id="membersSearch" data-role="listview" data-inset="true"
+			data-filter="true" data-filter-placeholder="Type a name..."
+			data-filter-theme="d">
+		</ul>
+	</div><!-- /content -->
+
+</div>
+<!-- /friends -->
+
+
+<!-- friends view -->
+<div data-role="page" id='memberDetails' data-theme="b">
+
+	<div data-role="header" data-fullscreen="true">
+    	<a href="#friends" data-icon="back">Back</a>
+		<h1 id="memberName">Friends</h1>
+    	<a id="followMember" href="#" class="ui-btn-right" data-icon=add>Follow</a>
+	</div>
+	<!-- /header -->
+
+	<div data-role="content">
+		<ul id="trackedSeries" data-role="listview" data-inset="true" data-divider-theme="d"
+			data-count-theme="b">
+		</ul>
 	</div><!-- /content -->
 
 </div>

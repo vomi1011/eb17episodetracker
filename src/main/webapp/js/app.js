@@ -118,10 +118,9 @@ $(document).on( "pageinit", "#home", function() {
 
 				var week = ["Sonnday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 				var html = "<li data-role='list-divider'>Upcomming</li>";
+				var noSeries = "<li>No upcomming series</li>";
 				
 				if (response.track.length > 0) {
-					var noSeries = "<li>No upcomming series</li>";
-					
 					$.each(response.track, function(i, val) {
 						console.debug(val);
 						
@@ -179,7 +178,7 @@ $(document).on( "pageinit", "#home", function() {
 	/**
 	 * shows detailed information about a serie
 	 */
-	$("#seriesSearch, #trend, #upcomming").click(function(event) {
+	$("#seriesSearch, #trend, #upcomming, #trackedSeries").click(function(event) {
 		// get the url
 		var title = $(event.target).data("url");
 		if (!title) {
@@ -248,8 +247,8 @@ $(document).on( "pageinit", "#home", function() {
 			// get the smaller version if an image is available
 			if (!(img.indexOf("fanart-dark.jpg") >= 0)) {
 				img = img.substring(0, img.length-4) + "-218.jpg";
-				$("#banner").attr("src", img);
 			}
+			$("#banner").attr("src", img);
 			
 			$("#genres").text(response.genres.join(", "));
 			$("#airs").text("Airs: " + (response.air_day ? response.air_day + " at ":"At ") + response.air_time + " on " + response.network);
@@ -309,6 +308,100 @@ $(document).on( "pageinit", "#home", function() {
 			$("#updateData").find("input[name=password]").val("");
 			$("#updateData").find("input[name=passwordConf]").val("");
 		});
+	});
+	
+	/**
+	 * searches for a member by name
+	 */
+	$("#membersSearch").on("listviewbeforefilter", function (e, data) {
+		var $ul = $(this),
+		$input = $(data.input),
+		value = $input.val().replace(/ /g, '+'),
+		html = "";
+		$ul.html("");
+		
+		if (value && value.length > 3) {
+			$ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
+			$ul.listview("refresh");
+			$.ajax({
+				url: baseUrl + "members/name/" + value,
+				dataType: "json",
+				crossDomain: true,
+			})
+			.then(function (response) {
+				$.each(response, function (i, val) {
+					html += "<li><a class='member' data-id='" + val.id +"'>" + val.forename+ " " + val.surname + "</a></li>";
+				});
+				$ul.html(html);
+				$ul.listview("refresh");
+				$ul.trigger("updatelayout");
+			});
+		}
+	});
+	
+	/**
+	 * shows detailed information about a serie
+	 */
+	$("#membersSearch").click(function(event) {
+		// get the id
+		var member = $(event.target).data("id");
+		
+		$.mobile.changePage("#memberDetails", { transition: "slide" });
+		
+		console.debug($(event.target));
+		
+		$("#followMember").click(function() {
+			var data = JSON.stringify({
+				"member": localStorage.userId,
+				"follow": member
+			});
+			
+			$.ajax({
+				type: "POST",
+				url: baseUrl + "members/follow",
+				dataType: "json",
+			    contentType: "application/json; charset=utf-8",
+				data: data,
+				crossDomain: true
+			})
+			.done(function(user) {
+				
+			});
+		});
+		
+		// fetch the user
+		$.ajax({
+			url: baseUrl + "members/" + member,
+			dataType: "json",
+			crossDomain: true,
+		})
+		.done(function(user) {
+			console.debug(user);
+
+			$("#memberName").text(user.forename + " " + user.surname);
+
+			var html = "<li data-role='list-divider'>Tracked Series</li>";
+			var noSeries = "<li>No tracked series</li>";
+			$.each(user.track, function(i, val) {
+				noSeries = "";
+				
+				// get the smaller version if an image is available
+				imgUrl = val.poster;
+				if (!(imgUrl.indexOf("poster-dark.jpg") >= 0)) {
+					imgUrl = imgUrl.substring(0, imgUrl.length-4) + "-138.jpg";
+				}
+				img = "<img src='" + imgUrl + "'>";
+				serieUrl = val.url;
+				airs = "<p data-url='" + serieUrl + "' style='margin-top: 4px;'>" + (val.air_day ? val.air_day + " at ":"At ") + val.air_time + " on " + val.network + "</p>";
+				
+				html += "<li><a class='serie' data-url='" + serieUrl + "' href='#serieDetails'>" + val.title + img + airs + "</a></li>";
+				
+			});
+			$("#trackedSeries").html(html + noSeries);
+			$("#trackedSeries").listview("refresh");
+			$("#trackedSeries").trigger("updatelayout");
+		});
+		
 	});
 	
 	/**
