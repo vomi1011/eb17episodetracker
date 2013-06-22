@@ -262,6 +262,19 @@ $(document).on( "pageinit", "#home", function() {
 			}
 		});
 	});
+
+	
+	/**
+	 * shows tracked series
+	 */
+	$("#home").on("pageshow", function() {
+		var userId = localStorage.userId;
+		
+		if (userId) {
+			trackedSeries();
+		}
+	});
+	
 	
 	/**
 	 * shows the profile view
@@ -339,16 +352,50 @@ $(document).on( "pageinit", "#home", function() {
 		}
 	});
 	
+	
+	/**
+	 * shows the friends view
+	 */
+	$("#friends").on("pageshow", function() {
+		var userId = localStorage.userId;
+		var html = "<li data-role='list-divider'>Followed Members</li>";
+		var noMembers = "<li>Search for a member and discover new series.</li>";
+		
+		if (userId) {
+			$("#noLogin").remove();
+			
+			// fetch the followed members
+			$.ajax({
+				url: baseUrl + "members/" + userId + "/follow",
+				dataType: "json",
+				crossDomain: true,
+			})
+			.done(function(response) {
+				$.each(response, function (i, val) {
+					noMembers = "";
+					html += "<li><a class='member' data-id='" + val.id + "'>" + val.forename + " " + val.surname + "</a></li>";
+				});
+				$("#followedMembers").html(html + noMembers);
+				$("#followedMembers").listview("refresh");
+				$("#followedMembers").trigger("updatelayout");
+		});
+		}
+	});
+	
 	/**
 	 * shows detailed information about a serie
 	 */
-	$("#membersSearch").click(function(event) {
+	$("#membersSearch, #followedMembers").click(function(event) {
 		// get the id
 		var member = $(event.target).data("id");
 		
 		$.mobile.changePage("#memberDetails", { transition: "slide" });
 		
 		console.debug($(event.target));
+		
+		if (member == localStorage.userId) {
+			$("#followMember").remove();
+		}
 		
 		$("#followMember").click(function() {
 			var data = JSON.stringify({
@@ -363,9 +410,6 @@ $(document).on( "pageinit", "#home", function() {
 			    contentType: "application/json; charset=utf-8",
 				data: data,
 				crossDomain: true
-			})
-			.done(function(user) {
-				
 			});
 		});
 		

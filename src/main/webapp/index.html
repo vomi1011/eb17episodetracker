@@ -33,8 +33,8 @@
 		<ul id="upcomming" data-role="listview" data-inset="true" data-divider-theme="d"></ul>
 		
 		<ul id="trend" data-role="listview" data-inset="true" data-divider-theme="d"></ul>
-
-		<a href="#friends" data-role="button" data-icon="star" data-theme="b">Friends</a>
+		
+		<a href="#friends" data-role="button" data-icon="star" data-theme="b">Followed</a>
     	<a href="#profile" data-role="button" data-icon="gear" data-theme="b">Profile</a>
 
 		</div>
@@ -99,7 +99,7 @@
 
 	<div data-role="header" data-fullscreen="true">
     	<a href="#home" data-icon="back">Back</a>
-		<h1>Friends</h1>
+		<h1>Followed</h1>
 	</div>
 	<!-- /header -->
 
@@ -107,6 +107,11 @@
 		<ul id="membersSearch" data-role="listview" data-inset="true"
 			data-filter="true" data-filter-placeholder="Type a name..."
 			data-filter-theme="d">
+		</ul>
+		<p id="noLogin">You are not signed in</p>
+		
+		<ul id="followedMembers" data-role="listview" data-inset="true" 
+			data-divider-theme="d">
 		</ul>
 	</div><!-- /content -->
 
