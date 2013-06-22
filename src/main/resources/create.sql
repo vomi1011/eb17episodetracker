@@ -123,3 +123,26 @@ WITH (
 );
 ALTER TABLE eb17episodetracker.track
   OWNER TO eb17episodetracker;
+
+
+-- Table: eb17episodetracker.follow
+
+-- DROP TABLE eb17episodetracker.follow;
+
+CREATE TABLE eb17episodetracker.follow
+(
+  member_fk integer,
+  follow integer,
+  id integer,
+  CONSTRAINT follow_fk FOREIGN KEY (follow)
+      REFERENCES eb17episodetracker.member (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT member_fk FOREIGN KEY (member_fk)
+      REFERENCES eb17episodetracker.member (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE eb17episodetracker.follow
+  OWNER TO postgres;
